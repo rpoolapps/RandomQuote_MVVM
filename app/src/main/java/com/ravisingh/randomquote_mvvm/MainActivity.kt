@@ -3,6 +3,7 @@ package com.ravisingh.randomquote_mvvm
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.ravisingh.randomquote_mvvm.api.QuoteService
 import com.ravisingh.randomquote_mvvm.api.RetrofitHelper
@@ -18,17 +19,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // get Instance of quoteService
-        val quoteService = RetrofitHelper.getInstance().create(QuoteService::class.java)
-
-        // get Instance of repository
-        val repository = QuoteRepository(quoteService)
+        val repository = (application as QuoteApplication).quoteRepository
 
         // get ViewModel instance
         mainViewModel = ViewModelProvider(this,MainViewModelFactory(repository)).get(MainViewModel::class.java)
 
         mainViewModel.quotes.observe(this) {
-            Log.d("RPOOL APPS", it.results.toString())
+            //Log.d("RPOOL APPS", it.results.toString())
+            Toast.makeText(this@MainActivity,it.results.size.toString(),Toast.LENGTH_SHORT).show()
         }
     }
 }

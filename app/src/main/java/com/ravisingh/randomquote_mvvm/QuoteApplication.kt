@@ -19,7 +19,8 @@ class QuoteApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         initialize()
-        setupWorker()
+
+        // setupWorker()
     }
 
     private fun setupWorker() {

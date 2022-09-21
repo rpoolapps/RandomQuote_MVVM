@@ -20,20 +20,28 @@ class QuoteRepository(
         get() = quotesLiveData
 
     suspend fun getQuotes(page: Int) {
-        if (NetworkUtils.isNetworkAvailable(applicationContext)){
+        if (NetworkUtils.isNetworkAvailable(applicationContext)) {
             val result = quoteService.getQuotes(page)
             if (result?.body() != null) {
                 quoteDatabase.quoteDao().addQuotes(result.body()!!.results)
                 quotesLiveData.postValue(result.body())
             }
-        }else{
+        } else {
             val quotes = quoteDatabase.quoteDao().getQuotes()
             // created dummy object of quoteListData and return DB data
-            val quoteList  = QuoteList(1,1,1,quotes,1,1)
+            val quoteList = QuoteList(1, 1, 1, quotes, 1, 1)
             quotesLiveData.postValue(quoteList)
         }
 
 
+    }
+
+    suspend fun getQuotesBackground() {
+        val randomNumber = (Math.random() * 10).toInt()
+        val result = quoteService.getQuotes(2)
+        if (result?.body() != null) {
+            quoteDatabase.quoteDao().addQuotes(result.body()!!.results)
+        }
     }
 
 
